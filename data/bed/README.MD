@@ -1,0 +1,1 @@
+BETA requires bed inputs
