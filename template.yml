@@ -1,0 +1,62 @@
+name: BETA
+on:
+  push:
+    paths:
+      - .github/workflows/*
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install OpenSSL
+      run: sudo apt-get update; sudo apt-get install bedtools
+
+    - name: Set up Python 2.7.18
+      uses: actions/setup-python@v1
+      with:
+        python-version: 2.7.18
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+        
+    - name: Python Pip Install
+      uses: logikal-code/pip-install@v1.0.0
+      with:
+        # The path to the requirements file
+        requirements: requirements.txt      
+
+    - name: add path
+      run: |
+        echo "app" >> $GITHUB_PATH
+        
+    - name: setup BETA
+      run: |
+        cd app
+        wget http://cistrome.org/BETA/src/BETA_1.0.7.zip
+        unzip BETA_1.0.7.zip
+        cd BETA_1.0.7
+        python setup.py install
+        BETA -h
+
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        destination_branch: "main"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: commit
+      run: |
+        git config --global user.email jh2259@mrc-cu.cam.ac.uk
+        git config --global user.name xihajun
+        git add .
+        git commit -m "BETA test" -a
+        
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
