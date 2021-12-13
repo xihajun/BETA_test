@@ -29,14 +29,11 @@ jobs:
       with:
         # The path to the requirements file
         requirements: requirements.txt      
-
-    - name: add path
-      run: |
-        echo "app" >> $GITHUB_PATH
         
     - name: setup BETA
       run: |
-        cd app
+        # TODO change it to app for later usage
+        cd data
         wget http://cistrome.org/BETA/src/BETA_1.0.7.zip
         unzip BETA_1.0.7.zip
         cd BETA_1.0.7
