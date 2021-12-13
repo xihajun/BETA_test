@@ -41,7 +41,13 @@ jobs:
         unzip BETA_1.0.7.zip
         cd BETA_1.0.7
         python setup.py install
-        BETA -h
+        cd ..
+    
+    - name: test BETA minus
+      run: |
+        cd code
+        bash BETAminus.sh
+        cd ..
 
     - name: pull-request
       uses: repo-sync/pull-request@v2
