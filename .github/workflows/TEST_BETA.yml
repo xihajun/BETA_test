@@ -33,12 +33,12 @@ jobs:
     - name: setup BETA
       run: |
         # TODO change it to app for later usage
-        cd data
+        cd code
         wget http://cistrome.org/BETA/src/BETA_1.0.7.zip
         unzip BETA_1.0.7.zip
         cd BETA_1.0.7
         python setup.py install
-        cd ..
+        cd ../../
     
     - name: test BETA minus
       run: |
